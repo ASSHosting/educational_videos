@@ -208,6 +208,56 @@
       text-align: center;
     }
 
+    .lightbox[hidden] {
+      display: none;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(35, 26, 36, 0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+    }
+
+    .lightbox-panel {
+      width: min(96vw, 1400px);
+      max-height: 94vh;
+      position: relative;
+    }
+
+    .lightbox-video {
+      width: 100%;
+      max-height: 92vh;
+      border-radius: 10px;
+      background: #000;
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.45);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -14px;
+      right: -14px;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 999px;
+      background: var(--brand);
+      color: #fff;
+      font-size: 1.35rem;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.35);
+    }
+
+    .lightbox-close:hover,
+    .lightbox-close:focus-visible {
+      background: var(--accent);
+    }
+
     @media (min-width: 760px) {
       .video-item { grid-column: span 6; }
     }
@@ -245,6 +295,13 @@
     <main id="video-categories" aria-label="Video-Kategorien"></main>
 
     <p class="footer">© <span id="year"></span> Lehrvideo-Übersicht</p>
+  </div>
+
+  <div id="video-lightbox" class="lightbox" hidden aria-hidden="true">
+    <div class="lightbox-panel" role="dialog" aria-modal="true" aria-label="Videoansicht">
+      <button id="lightbox-close" class="lightbox-close" type="button" aria-label="Video schließen">×</button>
+      <video id="lightbox-video" class="lightbox-video" controls playsinline preload="metadata"></video>
+    </div>
   </div>
 
   <script>
@@ -292,6 +349,9 @@
 
     const categoryFilters = {};
     let globalSearch = "";
+    const lightbox = document.getElementById("video-lightbox");
+    const lightboxVideo = document.getElementById("lightbox-video");
+    const lightboxCloseButton = document.getElementById("lightbox-close");
 
     function matchesSearch(video, categoryTitle, searchTerm) {
       if (!searchTerm) return true;
@@ -379,6 +439,24 @@
 
     const globalSearchInput = document.getElementById("global-search");
     const resetFiltersButton = document.getElementById("reset-filters");
+    const videoCategories = document.getElementById("video-categories");
+
+    function openLightbox(videoUrl) {
+      lightboxVideo.src = videoUrl;
+      lightbox.hidden = false;
+      lightbox.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      lightboxVideo.play().catch(() => {});
+    }
+
+    function closeLightbox() {
+      lightboxVideo.pause();
+      lightboxVideo.removeAttribute("src");
+      lightboxVideo.load();
+      lightbox.hidden = true;
+      lightbox.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
 
     renderVideos(videoData);
     globalSearchInput.addEventListener("input", (event) => {
@@ -392,6 +470,19 @@
         delete categoryFilters[key];
       });
       renderVideos(videoData);
+    });
+    videoCategories.addEventListener("click", (event) => {
+      const link = event.target.closest(".video-link");
+      if (!link) return;
+      event.preventDefault();
+      openLightbox(link.getAttribute("href"));
+    });
+    lightboxCloseButton.addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !lightbox.hidden) closeLightbox();
     });
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
