@@ -68,16 +68,6 @@
       max-width: 72ch;
     }
 
-    .quick-note {
-      margin-top: 14px;
-      padding: 10px 12px;
-      border-left: 4px solid var(--brand);
-      background: #f6f2f5;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      text-align: left;
-    }
-
     .search-wrap {
       margin-top: 14px;
       display: flex;
@@ -168,13 +158,6 @@
       font-weight: 700;
     }
 
-    .video-path {
-      margin: 3px 0 0;
-      font-size: 0.82rem;
-      color: var(--muted);
-      word-break: break-all;
-    }
-
     .video-link {
       display: inline-block;
       text-decoration: none;
@@ -247,15 +230,12 @@
         Diese Übersicht enthält alle verfügbaren Lehrvideos für VHS-Kurse, die KI-Akademie des BDS und den allgemeinen Unterricht.
         Klicke auf "Video öffnen", um die MP4-Datei direkt abzuspielen.
       </p>
-      <p class="quick-note">
-        Neue Videos hinzufügen: Nur die Daten in <code>videoData</code> im Script ergänzen.
-      </p>
       <div class="search-wrap">
         <input
           id="global-search"
           class="search-input"
           type="search"
-          placeholder="Alle Videos durchsuchen (Titel, Kategorie oder Dateipfad)"
+          placeholder="Alle Videos durchsuchen (Titel oder Kategorie)"
           aria-label="Videos durchsuchen"
         />
         <button id="reset-filters" class="reset-btn" type="button">Filter zurücksetzen</button>
@@ -271,7 +251,6 @@
     const videoData = [
       {
         title: "VHS-Kurse",
-        folder: "vhs/",
         videos: [
           {
             name: "Cloud: Backup-Strategie",
@@ -293,7 +272,6 @@
       },
       {
         title: "BDS KI-Akademie",
-        folder: "bds/",
         videos: [
           {
             name: "Angebots-KI: Einführung und Praxis",
@@ -303,7 +281,6 @@
       },
       {
         title: "Unterricht allgemein",
-        folder: "educational/",
         videos: [
           {
             name: "Data Science: Datenvisualisierung",
@@ -318,7 +295,7 @@
 
     function matchesSearch(video, categoryTitle, searchTerm) {
       if (!searchTerm) return true;
-      const haystack = `${video.name} ${video.file} ${categoryTitle}`.toLowerCase();
+      const haystack = `${video.name} ${categoryTitle}`.toLowerCase();
       return haystack.includes(searchTerm);
     }
 
@@ -335,7 +312,7 @@
 
         const categoryFilter = (categoryFilters[category.title] || "").toLowerCase().trim();
         const visibleVideos = afterGlobalSearch.filter((video) =>
-          !categoryFilter || `${video.name} ${video.file}`.toLowerCase().includes(categoryFilter)
+          !categoryFilter || video.name.toLowerCase().includes(categoryFilter)
         );
         if (visibleVideos.length === 0) return;
 
@@ -346,7 +323,7 @@
         header.className = "category-header";
         header.innerHTML = `
           <h2 class="category-title">${category.title}</h2>
-          <p class="category-meta">Ordner: <code>${category.folder}</code> · ${visibleVideos.length} Video(s)</p>
+          <p class="category-meta">${visibleVideos.length} Video(s)</p>
         `;
 
         if (category.videos.length > 3) {
@@ -381,7 +358,6 @@
           item.innerHTML = `
             <div>
               <p class="video-title">${video.name}</p>
-              <p class="video-path">${video.file}</p>
             </div>
             <a class="video-link" href="${video.file}">Video öffnen</a>
           `;
