@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lehrvideos – Übersicht</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --surface: #ffffff;
+      --text: #1f2933;
+      --muted: #5f6c7b;
+      --accent: #0f6b5b;
+      --accent-strong: #0b4f44;
+      --border: #d9e0e6;
+      --shadow: 0 10px 24px rgba(15, 35, 55, 0.08);
+      --radius: 16px;
+      --max: 1100px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: radial-gradient(circle at top right, #eaf6f2 0%, var(--bg) 45%);
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    .page {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 28px 16px 56px;
+    }
+
+    .hero {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px 22px;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      color: var(--accent-strong);
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      max-width: 72ch;
+    }
+
+    .quick-note {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-left: 4px solid var(--accent);
+      background: #f1fbf8;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    .search-wrap {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .search-input,
+    .category-filter-input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font: inherit;
+      color: var(--text);
+      background: #fff;
+    }
+
+    .search-input {
+      flex: 1 1 340px;
+    }
+
+    .search-input:focus-visible,
+    .category-filter-input:focus-visible {
+      outline: 2px solid #9fd3c6;
+      outline-offset: 1px;
+    }
+
+    .category {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .category-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(90deg, #f8fbfc, #eef8f5);
+    }
+
+    .category-title {
+      margin: 0;
+      font-size: 1.2rem;
+      color: var(--accent-strong);
+    }
+
+    .category-meta {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .category-filter {
+      margin: 0;
+      padding: 0 12px 12px;
+    }
+
+    .videos {
+      list-style: none;
+      margin: 0;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 10px;
+    }
+
+    .video-item {
+      grid-column: span 12;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: #fff;
+    }
+
+    .video-title {
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .video-path {
+      margin: 3px 0 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+      word-break: break-all;
+    }
+
+    .video-link {
+      display: inline-block;
+      text-decoration: none;
+      color: #fff;
+      background: var(--accent);
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .video-link:hover,
+    .video-link:focus-visible {
+      background: var(--accent-strong);
+    }
+
+    .reset-btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .reset-btn:hover,
+    .reset-btn:focus-visible {
+      background: #f3f7f6;
+      border-color: #bfcfd5;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.86rem;
+      margin-top: 18px;
+    }
+
+    .empty-state {
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (min-width: 760px) {
+      .video-item { grid-column: span 6; }
+    }
+
+    @media (min-width: 1050px) {
+      .video-item { grid-column: span 4; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <h1>Lehrvideos nach Kategorie</h1>
+      <p class="subtitle">
+        Diese Übersicht enthält alle verfügbaren Lehrvideos für VHS-Kurse, die KI-Akademie des BDS und den allgemeinen Unterricht.
+        Klicke auf "Video öffnen", um die MP4-Datei direkt abzuspielen.
+      </p>
+      <p class="quick-note">
+        Neue Videos hinzufügen: Nur die Daten in <code>videoData</code> im Script ergänzen.
+      </p>
+      <div class="search-wrap">
+        <input
+          id="global-search"
+          class="search-input"
+          type="search"
+          placeholder="Alle Videos durchsuchen (Titel, Kategorie oder Dateipfad)"
+          aria-label="Videos durchsuchen"
+        />
+        <button id="reset-filters" class="reset-btn" type="button">Filter zurücksetzen</button>
+      </div>
+    </section>
+
+    <main id="video-categories" aria-label="Video-Kategorien"></main>
+
+    <p class="footer">© <span id="year"></span> Lehrvideo-Übersicht</p>
+  </div>
+
+  <script>
+    const videoData = [
+      {
+        title: "VHS-Kurse",
+        folder: "vhs/",
+        videos: [
+          {
+            name: "Cloud: Backup-Strategie",
+            file: "vhs/vhs_cloud_backup.mp4"
+          },
+          {
+            name: "Cloud-Basics: Digitale Zettelwirtschaft vermeiden",
+            file: "vhs/vhs_cloud-basics_zettelwirtschaft.mp4"
+          },
+          {
+            name: "Cloud: Struktur und Aufbau",
+            file: "vhs/vhs_cloud_aufbau.mp4"
+          },
+          {
+            name: "Cloud: Digitale Organisation im Alltag",
+            file: "vhs/vhs_cloud_digitale-organisation.mp4"
+          }
+        ]
+      },
+      {
+        title: "BDS KI-Akademie",
+        folder: "bds/",
+        videos: [
+          {
+            name: "Angebots-KI: Einführung und Praxis",
+            file: "bds/bds_angebotski.mp4"
+          }
+        ]
+      },
+      {
+        title: "Unterricht allgemein",
+        folder: "educational/",
+        videos: [
+          {
+            name: "Data Science: Datenvisualisierung",
+            file: "educational/datascience_datenvisualisierung.mp4"
+          }
+        ]
+      }
+    ];
+
+    const categoryFilters = {};
+    let globalSearch = "";
+
+    function matchesSearch(video, categoryTitle, searchTerm) {
+      if (!searchTerm) return true;
+      const haystack = `${video.name} ${video.file} ${categoryTitle}`.toLowerCase();
+      return haystack.includes(searchTerm);
+    }
+
+    function renderVideos(categories) {
+      const root = document.getElementById("video-categories");
+      root.innerHTML = "";
+      let visibleCategoryCount = 0;
+
+      categories.forEach((category) => {
+        const afterGlobalSearch = category.videos.filter((video) =>
+          matchesSearch(video, category.title, globalSearch)
+        );
+        if (afterGlobalSearch.length === 0) return;
+
+        const categoryFilter = (categoryFilters[category.title] || "").toLowerCase().trim();
+        const visibleVideos = afterGlobalSearch.filter((video) =>
+          !categoryFilter || `${video.name} ${video.file}`.toLowerCase().includes(categoryFilter)
+        );
+        if (visibleVideos.length === 0) return;
+
+        const section = document.createElement("section");
+        section.className = "category";
+
+        const header = document.createElement("div");
+        header.className = "category-header";
+        header.innerHTML = `
+          <h2 class="category-title">${category.title}</h2>
+          <p class="category-meta">Ordner: <code>${category.folder}</code> · ${visibleVideos.length} Video(s)</p>
+        `;
+
+        if (category.videos.length > 3) {
+          const filterWrap = document.createElement("div");
+          filterWrap.className = "category-filter";
+          filterWrap.innerHTML = `
+            <input
+              class="category-filter-input"
+              type="search"
+              placeholder="Kategorie filtern: ${category.title}"
+              aria-label="Filter für ${category.title}"
+              value="${categoryFilters[category.title] || ""}"
+            />
+          `;
+          const filterInput = filterWrap.querySelector(".category-filter-input");
+          filterInput.addEventListener("input", (event) => {
+            categoryFilters[category.title] = event.target.value;
+            renderVideos(videoData);
+          });
+          section.appendChild(header);
+          section.appendChild(filterWrap);
+        } else {
+          section.appendChild(header);
+        }
+
+        const list = document.createElement("ul");
+        list.className = "videos";
+
+        visibleVideos.forEach((video) => {
+          const item = document.createElement("li");
+          item.className = "video-item";
+          item.innerHTML = `
+            <div>
+              <p class="video-title">${video.name}</p>
+              <p class="video-path">${video.file}</p>
+            </div>
+            <a class="video-link" href="${video.file}">Video öffnen</a>
+          `;
+          list.appendChild(item);
+        });
+
+        section.appendChild(list);
+        root.appendChild(section);
+        visibleCategoryCount += 1;
+      });
+
+      if (visibleCategoryCount === 0) {
+        const empty = document.createElement("p");
+        empty.className = "empty-state";
+        empty.textContent = "Keine Videos für den aktuellen Such- oder Filterbegriff gefunden.";
+        root.appendChild(empty);
+      }
+    }
+
+    const globalSearchInput = document.getElementById("global-search");
+    const resetFiltersButton = document.getElementById("reset-filters");
+
+    renderVideos(videoData);
+    globalSearchInput.addEventListener("input", (event) => {
+      globalSearch = event.target.value.toLowerCase().trim();
+      renderVideos(videoData);
+    });
+    resetFiltersButton.addEventListener("click", () => {
+      globalSearch = "";
+      globalSearchInput.value = "";
+      Object.keys(categoryFilters).forEach((key) => {
+        delete categoryFilters[key];
+      });
+      renderVideos(videoData);
+    });
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
