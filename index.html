@@ -158,6 +158,23 @@
       font-weight: 700;
     }
 
+    .audience-tag {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: #f7f9fc;
+    }
+    .audience-tag.audience-vhs { background: #f3eef1; color: #5c1932; border-color: rgba(92,25,50,.2); }
+    .audience-tag.audience-bds { background: #eef2fa; color: #173262; border-color: rgba(23,50,98,.2); }
+    .audience-tag.audience-allgemein { background: #eef7f0; color: #1f5d3a; border-color: rgba(31,93,58,.2); }
+
     .video-link {
       display: inline-block;
       text-decoration: none;
@@ -277,7 +294,7 @@
       />
       <h1>Lehrvideos nach Kategorie</h1>
       <p class="subtitle">
-        Diese Übersicht enthält alle verfügbaren Lehrvideos für VHS-Kurse, die KI-Akademie des BDS und den allgemeinen Unterricht.
+        Lehrvideos sortiert nach Thema. Der Tag pro Video zeigt die ursprüngliche Zielgruppe (VHS, BDS oder Allgemein).
         Klicke auf "Video öffnen", um die MP4-Datei direkt abzuspielen.
       </p>
       <div class="search-wrap">
@@ -307,65 +324,82 @@
   <script>
     const videoData = [
       {
-        title: "VHS-Kurse",
+        title: "KI-Sicherheit",
         videos: [
           {
-            name: "Cloud: Backup-Strategie",
-            file: "vhs/vhs_cloud_backup.mp4"
-          },
-          {
-            name: "Cloud-Basics: Digitale Zettelwirtschaft vermeiden",
-            file: "vhs/vhs_cloud-basics_zettelwirtschaft.mp4"
-          },
-          {
-            name: "Cloud: Struktur und Aufbau",
-            file: "vhs/vhs_cloud_aufbau.mp4"
-          },
-          {
-            name: "Cloud: Digitale Organisation im Alltag",
-            file: "vhs/vhs_cloud_digitale-organisation.mp4"
-          },
-          {
-            name: "Sicher online: Der unknackbare Satz",
-            file: "vhs/vhs_sicher_online_der_unknackbare_satz.mp4"
-          },
-          {
-            name: "Sicher online: Die unsichtbare Wartung",
-            file: "vhs/vhs_sicher_online_die_unsichtbare_wartung.mp4"
-          },
-          {
-            name: "Sicher online: Wie Betrüger online klingeln",
-            file: "vhs/vhs_sicher_online_wie_betrueger_online_klingeln.mp4"
-          }
-        ]
-      },
-      {
-        title: "BDS KI-Akademie",
-        videos: [
-          {
-            name: "Angebots-KI: Einführung und Praxis",
-            file: "bds/bds_angebotski.mp4"
-          }
-        ]
-      },
-      {
-        title: "Unterricht allgemein",
-        videos: [
-          {
-            name: "Data Science: Datenvisualisierung",
-            file: "educational/datascience_datenvisualisierung.mp4"
-          },
-          {
-            name: "KI: Datenschutz - Drei Regeln",
-            file: "educational/ki_datenschutz_drei_regeln.mp4"
+            name: "Was ist Künstliche Intelligenz?",
+            file: "ai-security/was_ist_ki.mp4",
+            audience: "Allgemein"
           },
           {
             name: "KI: Halluzinationen",
-            file: "educational/ki_halluzinationen.mp4"
+            file: "ai-security/halluzinationen.mp4",
+            audience: "Allgemein"
           },
           {
-            name: "Was ist Künstliche Intelligenz?",
-            file: "educational/was_ist_kuenstliche_intelligenz.mp4"
+            name: "KI: Datenschutz – Drei Regeln",
+            file: "ai-security/datenschutz_drei_regeln.mp4",
+            audience: "Allgemein"
+          },
+          {
+            name: "Angebots-KI: Einführung und Praxis",
+            file: "ai-security/angebotski.mp4",
+            audience: "BDS"
+          }
+        ]
+      },
+      {
+        title: "Cloud-Daten",
+        videos: [
+          {
+            name: "Cloud: Struktur und Aufbau",
+            file: "cloud_data/aufbau.mp4",
+            audience: "VHS"
+          },
+          {
+            name: "Cloud: Backup-Strategie",
+            file: "cloud_data/backup.mp4",
+            audience: "VHS"
+          },
+          {
+            name: "Cloud: Digitale Organisation im Alltag",
+            file: "cloud_data/digitale-organisation.mp4",
+            audience: "VHS"
+          },
+          {
+            name: "Cloud-Basics: Digitale Zettelwirtschaft vermeiden",
+            file: "cloud_data/zettelwirtschaft.mp4",
+            audience: "VHS"
+          }
+        ]
+      },
+      {
+        title: "Online-Sicherheit",
+        videos: [
+          {
+            name: "Sicher online: Der unknackbare Satz",
+            file: "online_security/unknackbarer_satz.mp4",
+            audience: "VHS"
+          },
+          {
+            name: "Sicher online: Die unsichtbare Wartung",
+            file: "online_security/unsichtbare_wartung.mp4",
+            audience: "VHS"
+          },
+          {
+            name: "Sicher online: Wie Betrüger online klingeln",
+            file: "online_security/betrueger_klingeln.mp4",
+            audience: "VHS"
+          }
+        ]
+      },
+      {
+        title: "Data Science",
+        videos: [
+          {
+            name: "Data Science: Datenvisualisierung",
+            file: "data-science/datenvisualisierung.mp4",
+            audience: "Allgemein"
           }
         ]
       }
@@ -379,8 +413,13 @@
 
     function matchesSearch(video, categoryTitle, searchTerm) {
       if (!searchTerm) return true;
-      const haystack = `${video.name} ${categoryTitle}`.toLowerCase();
+      const haystack = `${video.name} ${categoryTitle} ${video.audience || ""}`.toLowerCase();
       return haystack.includes(searchTerm);
+    }
+
+    function audienceClass(audience) {
+      if (!audience) return "";
+      return "audience-" + audience.toLowerCase();
     }
 
     function renderVideos(categories) {
@@ -439,9 +478,13 @@
         visibleVideos.forEach((video) => {
           const item = document.createElement("li");
           item.className = "video-item";
+          const tag = video.audience
+            ? `<span class="audience-tag ${audienceClass(video.audience)}">${video.audience}</span>`
+            : "";
           item.innerHTML = `
             <div>
               <p class="video-title">${video.name}</p>
+              ${tag}
             </div>
             <a class="video-link" href="${video.file}">Video öffnen</a>
           `;

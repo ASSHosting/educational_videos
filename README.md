@@ -1,12 +1,7 @@
 # Lehrvideos – Übersicht
 
-Diese Sammlung enthält Lehrvideos für drei Bereiche:
-
-- VHS-Kurse
-- BDS KI-Akademie
-- Unterricht allgemein
-
-Die Startseite `index.html` zeigt alle Videos kategorisiert an und verlinkt direkt auf die MP4-Dateien.
+Browserbasierte Übersicht aller Lehrvideos, ausgespielt unter [videos.ki-lernarchitekt.de](https://videos.ki-lernarchitekt.de).
+Die Videos sind nach **Thema** sortiert. Pro Video zeigt ein Tag die ursprüngliche Zielgruppe (VHS, BDS oder Allgemein).
 
 ## Projektstruktur
 
@@ -14,53 +9,51 @@ Die Startseite `index.html` zeigt alle Videos kategorisiert an und verlinkt dire
 .
 ├── index.html
 ├── README.md
-├── vhs/
-├── bds/
-└── educational/
+├── ai-security/      KI verstehen und sicher einsetzen
+├── cloud_data/       Cloud-Strategien und digitale Organisation
+├── online_security/  Online-Sicherheit und Betrugserkennung
+└── data-science/     Data Science und Datenvisualisierung
 ```
+
+Die Themen-Ordnerstruktur ist analog zum Repo [`education_games`](https://github.com/arno-schimmelpfennig/education_games).
 
 ## Funktionen der Übersicht (`index.html`)
 
-- Kategorisierte Anzeige aller Videos
-- Aussagekräftige Video-Titel statt nur Dateinamen
-- Globale Suche über Titel, Kategorie und Dateipfad
-- Kategorie-Filter nur bei Kategorien mit mehr als 3 Videos
-- Button `Filter zurücksetzen` für Suche + alle aktiven Kategorie-Filter
+- Kategorisierte Anzeige nach Thema
+- Audience-Tag pro Video (VHS / BDS / Allgemein)
+- Globale Suche über Titel, Kategorie und Audience
+- Kategorie-Filter bei Kategorien mit mehr als 3 Videos
+- Lightbox-Player direkt in der Übersicht
+- Button `Filter zurücksetzen`
 
-## Neue Videos hinzufügen
+## Neues Video hinzufügen
 
-Die Übersicht ist datengetrieben aufgebaut.
-
-1. In `index.html` den Bereich `videoData` öffnen.
-2. In der passenden Kategorie einen neuen Eintrag unter `videos` ergänzen:
+1. MP4-Datei in den passenden Themen-Ordner legen.
+2. In `index.html` den `videoData`-Array öffnen, im passenden Thema einen Eintrag ergänzen:
 
 ```js
 {
   name: "Titel des Videos",
-  file: "ordner/datei.mp4"
+  file: "ai-security/dateiname.mp4",
+  audience: "VHS"  // oder "BDS" oder "Allgemein"
 }
 ```
 
-3. Für eine neue Kategorie einen neuen Block in `videoData` ergänzen:
+3. Für ein neues Thema einen neuen Block in `videoData` ergänzen:
 
 ```js
 {
-  title: "Neue Kategorie",
-  folder: "neuer-ordner/",
+  title: "Neues Thema",
   videos: [
-    { name: "Beispiel", file: "neuer-ordner/beispiel.mp4" }
+    { name: "Beispiel", file: "neuer-ordner/beispiel.mp4", audience: "Allgemein" }
   ]
 }
 ```
 
 ## Lokal starten
 
-Im Projektordner:
-
 ```bash
 python -m http.server 8000
 ```
 
-Dann im Browser öffnen:
-
-`http://localhost:8000/`
+Im Browser: `http://localhost:8000/`
